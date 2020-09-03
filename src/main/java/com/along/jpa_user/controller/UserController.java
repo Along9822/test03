@@ -3,11 +3,10 @@ package com.along.jpa_user.controller;
 import com.along.jpa_user.entity.User;
 import com.along.jpa_user.service.Impl.UserServiceImpl;
 import com.along.jpa_user.util.RedisUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -96,4 +95,22 @@ public class UserController {
         redisUtil.set("all", userService.findAll().toString());
         return userService.findAll();
     }
+
+//    @Cacheable
+//    public int RedisUpdate(){
+//        return 1;
+//    }
+
+    @GetMapping("all")
+    public ResponseEntity<List> All(){
+        return ResponseEntity.ok().body(userService.findAll());
+    }
+
+    @GetMapping("/customHeader")
+    public ResponseEntity<String> customHeader(){
+        HttpHeaders headers=new HttpHeaders();
+        headers.add("Custom-Header","foo");
+        return new ResponseEntity<>("hello word!", headers,HttpStatus.OK);
+    }
+
 }
